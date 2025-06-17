@@ -1034,7 +1034,7 @@ export default function OBDTechLanding() {
                 alt="BIN Bank"
                 width={120}
                 height={40}
-                className="h-10 w-auto mb-4"
+                className="h-10 w-auto mb-4 animate-fade-in-up"
               />
               <p className="text-app-text-tertiary text-sm">
                 Transformando o futuro das soluções financeiras com tecnologia

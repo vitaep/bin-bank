@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "BIN Bank",
   description: "Created by the Mettadata team",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/logo-1.png",
   },
 };
 
