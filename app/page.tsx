@@ -120,6 +120,8 @@ export default function OBDTechLanding() {
     }
   };
 
+  const [isServiceUnavailable, setIsServiceUnavailable] = useState(true);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-app-bg-dark via-app-bg-medium to-black text-app-text-primary font-['Poppins',sans-serif] relative">
       <FloatingElements />
@@ -1110,13 +1112,26 @@ export default function OBDTechLanding() {
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-app-bg-light to-app-bg-lighter hover:from-app-bg-lighter hover:to-app-accent px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
-              </button>
+              <div className="relative">
+                <button
+                  type="submit"
+                  disabled={isSubmitting || isServiceUnavailable}
+                  className="w-full bg-gradient-to-r from-app-bg-light to-app-bg-lighter hover:from-app-bg-lighter hover:to-app-accent px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed relative"
+                >
+                  {isServiceUnavailable
+                    ? "Serviço Indisponível"
+                    : isSubmitting
+                    ? "Enviando..."
+                    : "Enviar Mensagem"}
+                </button>
+
+                {isServiceUnavailable && (
+                  <div className="absolute top-full mt-2 w-full bg-red-100 text-red-800 text-sm p-3 rounded shadow-md border border-red-300 animate-fade-in">
+                    Este serviço está temporariamente indisponível. Tente
+                    novamente mais tarde.
+                  </div>
+                )}
+              </div>
               <p className="text-app-text-tertiary text-sm mt-4">
                 Ao enviar este formulário, você concorda com nossa política de
                 privacidade e aceita receber comunicações da BIN Bank.
