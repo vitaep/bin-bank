@@ -60,6 +60,66 @@ export default function OBDTechLanding() {
     </div>
   );
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    interest: "",
+    message: "",
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<null | "success" | "error">(
+    null
+  );
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitStatus("success");
+        // Reset form after successful submission
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          interest: "",
+          message: "",
+        });
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-app-bg-dark via-app-bg-medium to-black text-app-text-primary font-['Poppins',sans-serif] relative">
       <FloatingElements />
@@ -72,8 +132,8 @@ export default function OBDTechLanding() {
               <Image
                 src="/logo-1.png"
                 alt="BIN Bank"
-                width={160}
-                height={60}
+                width={200}
+                height={80}
                 className="h-10 w-auto"
               />
             </div>
@@ -159,8 +219,11 @@ export default function OBDTechLanding() {
         className="min-h-screen flex items-center justify-center relative z-10"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center items-center mb-8 rounded-2xl p-8 bg-white/[2%] backdrop-blur-sm shadow-md mt-auto">
-            <img src="/logo-1.png" className="w-72 md:w-96 drop-shadow-md" />
+          <div className="flex justify-center items-center mb-8 rounded-2xl p-8 bg-black/[10%] backdrop-blur-sm shadow-md mt-auto">
+            <img
+              src="/logo-1.png"
+              className="w-72 md:w-[400px] drop-shadow-md"
+            />
           </div>
           <div className="animate-fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-app-text-secondary via-app-text-primary to-app-text-secondary bg-clip-text text-transparent">
@@ -959,7 +1022,7 @@ export default function OBDTechLanding() {
                 </p>
               </div>
               <div
-                className="bg-gradient-to-br from-app-bg-medium/50 to-app-bg-dark/50 p-6 rounded-xl backdrop-blur-sm border border-app-border/50 transition-all duration-300 hover:bg-app-hover-bg/40 hover:scale-105 hover:shadow-lg"
+                className="bg-gradient-to-br from-app-bg-medium/50 to-app-bg-dark/50 p-6 rounded-xl backdrop-blur-sm border border-app-border/50 transition-all duration-300 hover:bg-app-hover-bg/40 hover:scale-105 hover:shadow-lg cursor-pointer"
                 onClick={() =>
                   window.open("https://wa.me/551151976033", "_blank")
                 }
@@ -975,26 +1038,46 @@ export default function OBDTechLanding() {
               </div>
             </div>
 
-            <form className="bg-black/20 backdrop-blur-md p-8 rounded-2xl border border-app-border/50">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-black/20 backdrop-blur-md p-8 rounded-2xl border border-app-border/50"
+            >
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <input
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   placeholder="Seu nome completo"
                   className="bg-app-bg-medium/50 border border-app-border/50 rounded-lg px-4 py-3 text-app-text-primary placeholder-app-text-tertiary focus:outline-none focus:border-app-accent transition-colors"
+                  required
                 />
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="Seu melhor email"
                   className="bg-app-bg-medium/50 border border-app-border/50 rounded-lg px-4 py-3 text-app-text-primary placeholder-app-text-tertiary focus:outline-none focus:border-app-accent transition-colors"
+                  required
                 />
               </div>
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <input
                   type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
                   placeholder="Nome da empresa"
                   className="bg-app-bg-medium/50 border border-app-border/50 rounded-lg px-4 py-3 text-app-text-primary placeholder-app-text-tertiary focus:outline-none focus:border-app-accent transition-colors"
                 />
-                <select className="bg-app-bg-medium/50 border border-app-border/50 rounded-lg px-4 py-3 text-app-text-primary focus:outline-none focus:border-app-accent transition-colors">
+                <select
+                  name="interest"
+                  value={formData.interest}
+                  onChange={handleChange}
+                  className="bg-app-bg-medium/50 border border-app-border/50 rounded-lg px-4 py-3 text-app-text-primary focus:outline-none focus:border-app-accent transition-colors"
+                  required
+                >
                   <option value="">Área de interesse</option>
                   <option value="banco-digital">Banco Digital</option>
                   <option value="pagamentos">Gateway de Pagamentos</option>
@@ -1005,15 +1088,34 @@ export default function OBDTechLanding() {
                 </select>
               </div>
               <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 placeholder="Conte-nos mais sobre seu projeto e como podemos ajudar..."
                 rows={4}
                 className="w-full bg-app-bg-medium/50 border border-app-border/50 rounded-lg px-4 py-3 text-app-text-primary placeholder-app-text-tertiary focus:outline-none focus:border-app-accent transition-colors mb-6"
+                required
               ></textarea>
+
+              {submitStatus === "success" && (
+                <div className="mb-4 p-4 bg-green-500/20 text-green-300 rounded-lg">
+                  Mensagem enviada com sucesso! Entraremos em contato em breve.
+                </div>
+              )}
+
+              {submitStatus === "error" && (
+                <div className="mb-4 p-4 bg-red-500/20 text-red-300 rounded-lg">
+                  Ocorreu um erro ao enviar sua mensagem. Por favor, tente
+                  novamente mais tarde.
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-app-bg-light to-app-bg-lighter hover:from-app-bg-lighter hover:to-app-accent px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                disabled={isSubmitting}
+                className="w-full bg-gradient-to-r from-app-bg-light to-app-bg-lighter hover:from-app-bg-lighter hover:to-app-accent px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Enviar Mensagem
+                {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
               </button>
               <p className="text-app-text-tertiary text-sm mt-4">
                 Ao enviar este formulário, você concorda com nossa política de
@@ -1032,8 +1134,8 @@ export default function OBDTechLanding() {
               <Image
                 src="/logo-1.png"
                 alt="BIN Bank"
-                width={120}
-                height={40}
+                width={160}
+                height={80}
                 className="h-10 w-auto mb-4 animate-fade-in-up"
               />
               <p className="text-app-text-tertiary text-sm">
