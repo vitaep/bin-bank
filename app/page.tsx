@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-
+import { MessageCircle } from "lucide-react";
 export default function OBDTechLanding() {
   const [activeSection, setActiveSection] = useState("home");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -228,9 +228,6 @@ export default function OBDTechLanding() {
             />
           </div>
           <div className="animate-fade-in-up">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-app-text-secondary via-app-text-primary to-app-text-secondary bg-clip-text text-transparent">
-              BIN Bank
-            </h1>
             <p className="text-xl md:text-2xl mb-8 text-app-text-secondary max-w-3xl mx-auto">
               Sistemas e tecnologia Financeira completa para o seu negócio
             </p>
@@ -1229,6 +1226,15 @@ export default function OBDTechLanding() {
               Soluções financeiras inovadoras para o futuro dos negócios.
             </p>
           </div>
+          <a
+            href="https://wa.me/+551151986345"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 z-50"
+            title="Fale conosco no WhatsApp"
+          >
+            <MessageCircle className="w-6 h-6" />
+          </a>
         </div>
       </footer>
 
