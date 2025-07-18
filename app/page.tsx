@@ -1014,7 +1014,7 @@ export default function OBDTechLanding() {
                   Email
                 </h3>
                 <p className="text-app-text-tertiary">
-                  negocios@b2btecnologia.io
+                  comercial@binbank.com.br
                 </p>
                 <p className="text-app-text-tertiary text-sm mt-2">
                   Resposta em até 2 horas
@@ -1023,14 +1023,14 @@ export default function OBDTechLanding() {
               <div
                 className="bg-gradient-to-br from-app-bg-medium/50 to-app-bg-dark/50 p-6 rounded-xl backdrop-blur-sm border border-app-border/50 transition-all duration-300 hover:bg-app-hover-bg/40 hover:scale-105 hover:shadow-lg cursor-pointer"
                 onClick={() =>
-                  window.open("https://wa.me/551151976033", "_blank")
+                  window.open("https://wa.me/551151986345", "_blank")
                 }
               >
                 <div className="text-3xl mb-4">📱</div>
                 <h3 className="text-xl font-semibold mb-2 text-app-text-primary">
                   WhatsApp
                 </h3>
-                <p className="text-app-text-tertiary">+55 (11) 5197-6033</p>
+                <p className="text-app-text-tertiary">+55 (11) 5198-6345</p>
                 <p className="text-app-text-tertiary text-sm mt-2">
                   Atendimento 24/7
                 </p>
