@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import emailjs from "@emailjs/browser";
 import Image from "next/image";
 import { MessageCircle } from "lucide-react";
 export default function OBDTechLanding() {
@@ -121,6 +122,37 @@ export default function OBDTechLanding() {
   };
 
   const [isServiceUnavailable, setIsServiceUnavailable] = useState(true);
+
+  const formRef = useRef(null);
+
+  const handleEmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    emailjs
+      .sendForm(
+        "binbank_sender", // <- ID do serviço de email
+        "template_39gj11f", // <- ID do template
+        formRef.current!, // <- Referência do form
+        "TtxFsqh9Eisew94tt" // <- Sua public key do emailjs
+      )
+      .then(() => {
+        setIsSubmitting(false);
+        setSubmitStatus("success");
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          interest: "",
+          message: "",
+        });
+      })
+      .catch(() => {
+        setIsSubmitting(false);
+        setSubmitStatus("error");
+      });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-app-bg-dark via-app-bg-medium to-black text-app-text-primary font-['Poppins',sans-serif] relative">
@@ -1007,38 +1039,9 @@ export default function OBDTechLanding() {
               descubra como podemos ajudar você a crescer no mercado financeiro.
             </p>
 
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
-              <div className="bg-gradient-to-br from-app-bg-medium/50 to-app-bg-dark/50 p-6 rounded-xl backdrop-blur-sm border border-app-border/50 transition-all duration-300 hover:bg-app-hover-bg/40 hover:scale-105 hover:shadow-lg">
-                <div className="text-3xl mb-4">📧</div>
-                <h3 className="text-xl font-semibold mb-2 text-app-text-primary">
-                  Email
-                </h3>
-                <p className="text-app-text-tertiary">
-                  comercial@binbank.com.br
-                </p>
-                <p className="text-app-text-tertiary text-sm mt-2">
-                  Resposta em até 2 horas
-                </p>
-              </div>
-              <div
-                className="bg-gradient-to-br from-app-bg-medium/50 to-app-bg-dark/50 p-6 rounded-xl backdrop-blur-sm border border-app-border/50 transition-all duration-300 hover:bg-app-hover-bg/40 hover:scale-105 hover:shadow-lg cursor-pointer"
-                onClick={() =>
-                  window.open("https://wa.me/551151986345", "_blank")
-                }
-              >
-                <div className="text-3xl mb-4">📱</div>
-                <h3 className="text-xl font-semibold mb-2 text-app-text-primary">
-                  WhatsApp
-                </h3>
-                <p className="text-app-text-tertiary">+55 (11) 5198-6345</p>
-                <p className="text-app-text-tertiary text-sm mt-2">
-                  Atendimento 24/7
-                </p>
-              </div>
-            </div>
-
             <form
-              onSubmit={handleSubmit}
+              ref={formRef}
+              onSubmit={handleEmailSubmit}
               className="bg-black/20 backdrop-blur-md p-8 rounded-2xl border border-app-border/50"
             >
               <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -1101,7 +1104,6 @@ export default function OBDTechLanding() {
                   Mensagem enviada com sucesso! Entraremos em contato em breve.
                 </div>
               )}
-
               {submitStatus === "error" && (
                 <div className="mb-4 p-4 bg-red-500/20 text-red-300 rounded-lg">
                   Ocorreu um erro ao enviar sua mensagem. Por favor, tente
@@ -1112,22 +1114,11 @@ export default function OBDTechLanding() {
               <div className="relative">
                 <button
                   type="submit"
-                  disabled={isSubmitting || isServiceUnavailable}
+                  disabled={isSubmitting}
                   className="w-full bg-gradient-to-r from-app-bg-light to-app-bg-lighter hover:from-app-bg-lighter hover:to-app-accent px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed relative"
                 >
-                  {isServiceUnavailable
-                    ? "Serviço Indisponível"
-                    : isSubmitting
-                    ? "Enviando..."
-                    : "Enviar Mensagem"}
+                  {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
                 </button>
-
-                {isServiceUnavailable && (
-                  <div className="absolute top-full mt-2 w-full bg-red-100 text-red-800 text-sm p-3 rounded shadow-md border border-red-300 animate-fade-in">
-                    Este serviço está temporariamente indisponível. Tente
-                    novamente mais tarde.
-                  </div>
-                )}
               </div>
               <p className="text-app-text-tertiary text-sm mt-4">
                 Ao enviar este formulário, você concorda com nossa política de
